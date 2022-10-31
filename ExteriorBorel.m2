@@ -1,5 +1,3 @@
-restart
-
 borelBigger = (m,n) -> (
     if degree m != degree n then return false;
     d := sum degree m;
@@ -38,10 +36,32 @@ SSideals = (c,E) -> (
 	);
     return unique apply(LIST, I-> iota(I_0)))
 
+end--
+
+
+restart
+path = prepend("./external-packages", path)
+debug needsPackage "HilbertSchemes"
+needs "ExteriorBorel.m2"
+
+
 kk = ZZ/32003;
 n = 5;
 S = kk[x_1..x_n];
-SSideals(17,S)
+ss = SSideals(17,S)
+netList ss
+HF(ss_0, 0, 5)
 
 E = kk[x_1..x_n, SkewCommutative => true]
-SSideals(17,E)
+ss = SSideals(17,E)
+netList ss
+HF(ss_0, 0, 5)
+matrix for s in ss list HF(s, 0, 5)
+
+numcols basis(0, Hom(ss_0, comodule ss_0))
+for s in ss list numcols basis(0, Hom(s, comodule s))
+
+F = groebnerFamily ss_2
+see F
+isHomogeneous F
+describe ring F

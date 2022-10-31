@@ -5,8 +5,7 @@ packages here:
 
 HilbertSchemes -- from my class, also with Ayah Almousa, possibly Greg Smith.
 
-LCMSpaceCurves  -- 
-MinimalSpaceCurves --
+LCMSpaceCurves  -- from project with Rich Liebling and Kristine Jones.
 TriangleDiagrams -- from project with Rich Liebling and Kristine Jones.
             
     
