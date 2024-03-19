@@ -366,6 +366,9 @@ processHilbs Ha
 
 F = groebnerFamily borels#0
 F = groebnerFamily(borels#0, AllStandard => true)
+J = groebnerStratum F;
+numcols basis(0, Hom(borels#0, comodule borels#0))
+
 F = groebnerFamily(borels#1, AllStandard => true)
 F = groebnerFamily(borels#2, AllStandard => true)
 

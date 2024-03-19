@@ -31,7 +31,8 @@ export {
     "randomPtOnLex",
     "canonicalDistraction",
     "randomCanonicalDistraction",
-    "fanComponents"
+    "fanComponents",
+    "lexGotzmann" -- Lex ideal from a Gotzmann partition.
     }
 
 -- Utility routines --
@@ -62,6 +63,7 @@ mpart = (t, deg, m) -> binomial(t + deg, deg+1) - binomial(t + deg - m, deg+1)
 -- the macaulay partition (m0, m1, ..., md) for  Hilbert polynomial of degree d.
 macaulayVector = method()
 macaulayVector RingElement := Partition => (hp) -> (
+    if hp == 0 then return {};
     t := (ring hp)_0;
     d := first degree hp;
     c := lift(d! * leadCoefficient hp, ZZ);
@@ -80,12 +82,12 @@ AtoM List := Partition => (a) -> new Partition from accumulate(a, 0, (x,y) -> x+
 macaulayHP = method()
 macaulayHP(List, RingElement) :=
 macaulayHP(Partition, RingElement) := (M, z) -> (
-    sum for i from 0 to #M-1 list (binomial(z + i, i+1) - binomial(z + i - M_i, i+1))
+    0_(ring z) + sum for i from 0 to #M-1 list (binomial(z + i, i+1) - binomial(z + i - M_i, i+1))
     )
 
 gotzmannHP = method()
 gotzmannHP(List, RingElement) := 
-gotzmannHP(Partition, RingElement) := (p, z) -> sum for i from 0 to #p-1 list binomial(z + p#i - i - 1, p#i - 1)
+gotzmannHP(Partition, RingElement) := (p, z) -> 0_(ring z) + sum for i from 0 to #p-1 list binomial(z + p#i - i - 1, p#i - 1)
 
 HP = method()
 HP Ideal := (I) -> hilbertPolynomial(I, Projective => false)
@@ -150,6 +152,7 @@ Lideal(Ring, List) := (S, L) -> (
     else S_(n-#L)^(L#(#L-1)) * (ideal(S_(n-#L)) + Lideal(S, drop(L,-1)))
     )
 
+lexIdeal(List, Ring) :=
 lexIdeal(Partition, Ring) := opts -> (M, S) -> (
     a := MtoA M;
     n := numgens S - 1;
@@ -159,6 +162,10 @@ lexIdeal(Partition, Ring) := opts -> (M, S) -> (
     trim(L1 + L2)
     )
 
+lexGotzmann = method()
+lexGotzmann(List, Ring) := (G, S) -> lexIdeal(conjugate new Partition from G, S)
+lexGotzmann(Partition, Ring) := (G, S) -> lexIdeal(conjugate G, S)
+    
 TEST ///
 -*
   restart
